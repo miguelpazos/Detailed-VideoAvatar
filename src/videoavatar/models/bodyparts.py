@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 
-import cPickle as pkl
+from six.moves import cPickle as pkl
 import numpy as np
 
 _cache = None

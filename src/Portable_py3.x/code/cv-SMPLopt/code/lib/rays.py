@@ -6,7 +6,7 @@ import numpy as np
 import chumpy as ch
 
 from lib.geometry import visible_boundary_edge_verts
-from vendor.smplify.robustifiers import GMOf
+from vendor.smplify.lib.robustifiers import GMOf
 
 
 def plucker(rays):
@@ -75,7 +75,7 @@ def rays_from_silh(mask, camera):
     if cv2.__version__[0] == '2':
         contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     else:
-        _, contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
     silh = np.zeros_like(mask)
 

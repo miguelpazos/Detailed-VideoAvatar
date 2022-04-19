@@ -9,7 +9,7 @@ import h5py
 import argparse
 import numpy as np
 import chumpy as ch
-import pickle as pkl# import cPickle as pkl
+import pickle as pkl# import pickle as pkl
 
 from opendr.camera import ProjectPoints
 from opendr.renderer import BoundaryRenderer, ColoredRenderer

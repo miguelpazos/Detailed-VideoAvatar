@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 
-import pickle as pkl # import cPickle as pkl
+import pickle as pkl # import pickle as pkl
 import numpy as np
 
 _cache = None

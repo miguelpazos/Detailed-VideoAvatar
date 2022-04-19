@@ -3,7 +3,7 @@
 
 import chumpy as ch
 import numpy as np
-import cPickle as pkl
+from six.moves import cPickle as pkl
 import scipy.sparse as sp
 from chumpy.ch import Ch
 from vendor.smpl.posemapper import posemap, Rodrigues
@@ -19,7 +19,7 @@ VERT_EYE_R = 6262
 
 class Smpl(Ch):
     """
-    Class to store SMPL object with slightly improved code and access to more matrices
+    Class to store SMPL object with slightly improved src and access to more matrices
     """
     terms = 'model',
     dterms = 'trans', 'betas', 'pose', 'v_personal'

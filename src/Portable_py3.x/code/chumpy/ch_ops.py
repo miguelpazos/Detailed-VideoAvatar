@@ -795,7 +795,7 @@ def nonzero(a):
         a = a.r
     return np.nonzero(a)
 
-# Try to pull the code for tensordot in from numpy and reinterpret it using chumpy ops
+# Try to pull the src for tensordot in from numpy and reinterpret it using chumpy ops
 try:
     import inspect
     exec(''.join(inspect.getsourcelines(np.tensordot)[0]))

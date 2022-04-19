@@ -9,7 +9,7 @@ import cv2
 import h5py
 import argparse
 import numpy as np
-# import cPickle as pkl
+# import pickle as pkl
 import pickle as pkl
 
 from opendr.renderer import ColoredRenderer

@@ -3,11 +3,11 @@
 
 import chumpy as ch
 import numpy as np
-import pickle as pkl # import cPickle as pkl
+import pickle as pkl # import pickle as pkl
 import scipy.sparse as sp
 from chumpy.ch import Ch
-from vendor.smpl.posemapper import posemap, Rodrigues
-from vendor.smpl.serialization import backwards_compatibility_replacements
+from vendor.smpl.smpl_webuser.posemapper import posemap, Rodrigues
+from vendor.smpl.smpl_webuser.serialization import backwards_compatibility_replacements
 
 
 VERT_NOSE = 331
@@ -19,7 +19,7 @@ VERT_EYE_R = 6262
 
 class Smpl(Ch):
     """
-    Class to store SMPL object with slightly improved code and access to more matrices
+    Class to store SMPL object with slightly improved src and access to more matrices
     """
     terms = 'model',
     dterms = 'trans', 'betas', 'pose', 'v_personal'

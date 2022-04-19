@@ -1,7 +1,8 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 import sys
-from imp import reload # add the line
+from imp import reload  # add the line
+
 reload(sys)
 # sys.setdefaultencoding('utf-8')
 
@@ -10,7 +11,7 @@ import h5py
 import argparse
 import numpy as np
 import chumpy as ch
-# import cPickle as pkl
+# import pickle as pkl
 import pickle as pkl
 
 from opendr.camera import ProjectPoints
@@ -24,8 +25,13 @@ from lib.frame import FrameData
 from models.smpl import Smpl, copy_smpl, joints_coco
 from models.bodyparts import faces_no_hands
 
-from vendor.smplify.sphere_collisions import SphereCollisions
-from vendor.smplify.robustifiers import GMOf
+import sys
+
+sys.path.append("/home/agusriscos/aitaca/Detailed-VideoAvatar/src/Portable_py3.x/src/cv-SMPLopt/src")
+
+from vendor.smplify.lib.sphere_collisions import SphereCollisions
+from vendor.smplify.lib.robustifiers import GMOf
+
 
 def mylog(s, obj=None):
     return
@@ -35,7 +41,6 @@ def mylog(s, obj=None):
     #     print(np.array(obj))
     # elif obj:
     #     print(obj)
-
 
 
 def get_cb(viz_rn, f):
@@ -82,7 +87,7 @@ def init(frames, body_height, b2m, viz_rn):
 
     E_height = None
     if body_height is not None:
-         E_height = height_predictor(b2m, betas) - body_height * 1000.
+        E_height = height_predictor(b2m, betas) - body_height * 1000.
 
     # first get a rough pose for all frames individually
     for i, f in enumerate(frames):
@@ -150,7 +155,7 @@ def init(frames, body_height, b2m, viz_rn):
 def reinit_frame(frame, null_pose, nohands, viz_rn):
     mylog("# reinit_frame")
 
-    if (np.sum(frame.pose_obj.r ** 2) > 625 or np.sum(frame.pose_prior_obj.r ** 2) > 75)\
+    if (np.sum(frame.pose_obj.r ** 2) > 625 or np.sum(frame.pose_prior_obj.r ** 2) > 75) \
             and np.sum(frame.keypoints[[0, 2, 5, 8, 11], 2]) > 3.:
 
         log.info('Tracking error too large. Re-init frame...')
@@ -217,7 +222,8 @@ def fit_pose(frame, last_smpl, frustum, nohands, viz_rn):
     dist_o = cv2.distanceTransform(255 - np.uint8(frame.mask * 255), dst_type, 5)
     dist_o[dist_o > 50] = 50
 
-    rn_m = ColoredRenderer(camera=frame.camera, v=frame.smpl, f=faces, vc=np.ones_like(frame.smpl), frustum=frustum, bgcolor=0, num_channels=1)
+    rn_m = ColoredRenderer(camera=frame.camera, v=frame.smpl, f=faces, vc=np.ones_like(frame.smpl), frustum=frustum,
+                           bgcolor=0, num_channels=1)
 
     E = {
         'mask': gaussian_pyramid(rn_m * dist_o * 100. + (1 - rn_m) * dist_i, n_levels=4, normalization='size') * 80.,
@@ -232,10 +238,12 @@ def fit_pose(frame, last_smpl, frustum, nohands, viz_rn):
 
     if nohands:
         # x0 = [frame.smpl.pose[range(21) + range(27, 30) + range(36, 60)], frame.smpl.trans]
-        x0 = [frame.smpl.pose[list(range(21)) + list(range(27, 30)) + list(range(36, 60))], frame.smpl.trans] # for python3
+        x0 = [frame.smpl.pose[list(range(21)) + list(range(27, 30)) + list(range(36, 60))],
+              frame.smpl.trans]  # for python3
     else:
         # x0 = [frame.smpl.pose[range(21) + range(27, 30) + range(36, 72)], frame.smpl.trans]
-        x0 = [frame.smpl.pose[list(range(21)) + list(range(27, 30)) + list(range(36, 72))], frame.smpl.trans] # for python3
+        x0 = [frame.smpl.pose[list(range(21)) + list(range(27, 30)) + list(range(36, 72))],
+              frame.smpl.trans]  # for python3
 
     ch.minimize(
         E,
@@ -250,17 +258,16 @@ def fit_pose(frame, last_smpl, frustum, nohands, viz_rn):
 
 def main(keypoint_file, masks_file, camera_file, out, model_file, prior_file, resize,
          body_height, nohands, display):
-
     # load data
     mylog("load data")
     with open(model_file, 'rb') as fp:
-        model_data = pkl.load(fp,encoding='latin1')
+        model_data = pkl.load(fp, encoding='latin1')
 
     with open(camera_file, 'rb') as fp:
-        camera_data = pkl.load(fp,encoding='latin1')
+        camera_data = pkl.load(fp, encoding='latin1')
 
     with open(prior_file, 'rb') as fp:
-        prior_data = pkl.load(fp,encoding='latin1')
+        prior_data = pkl.load(fp, encoding='latin1')
 
     mylog("choice npz npy")
     if 'basicModel_f' in model_file:
@@ -269,15 +276,15 @@ def main(keypoint_file, masks_file, camera_file, out, model_file, prior_file, re
     else:
         regs = np.load('vendor/smplify/models/regressors_locked_normalized_male.npz')
         b2m = np.load('assets/b2m_m.npy')
-    mylog("regs",regs["v2lens"].shape)
+    mylog("regs", regs["v2lens"].shape)
 
     mylog("main")
     keypoints = h5py.File(keypoint_file, 'r')['keypoints']
-    mylog("keypoints",keypoints)
+    mylog("keypoints", keypoints)
     masks = h5py.File(masks_file, 'r')['masks']
-    mylog("masks",masks)
+    mylog("masks", masks)
     num_frames = masks.shape[0]
-    mylog("num_frames",num_frames)
+    mylog("num_frames", num_frames)
 
     # init
     mylog(model_data)
@@ -341,7 +348,7 @@ def main(keypoint_file, masks_file, camera_file, out, model_file, prior_file, re
         trans_dset = fp.create_dataset("trans", (num_frames, 3), 'f', chunks=True, compression="lzf")
         betas_dset = fp.create_dataset("betas", (10,), 'f', chunks=True, compression="lzf")
 
-        for i in range(num_frames):# for i in xrange(num_frames):
+        for i in range(num_frames):  # for i in xrange(num_frames):
             if i == 0:
                 current_frame = base_frame
             else:
@@ -360,7 +367,6 @@ def main(keypoint_file, masks_file, camera_file, out, model_file, prior_file, re
                 betas_dset[:] = current_frame.smpl.betas.r
 
             last_smpl = current_frame.smpl
-
 
     log.info('Done.')
 

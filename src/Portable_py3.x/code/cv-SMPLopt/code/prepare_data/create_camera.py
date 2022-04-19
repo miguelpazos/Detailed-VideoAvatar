@@ -3,7 +3,7 @@
 
 import numpy as np
 import argparse
-import cPickle as pkl
+import pickle as pkl
 
 """
 
