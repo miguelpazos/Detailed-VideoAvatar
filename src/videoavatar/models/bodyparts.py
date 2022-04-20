@@ -12,7 +12,7 @@ def get_bodypart_vertex_ids():
 
     if _cache is None:
         with open('assets/bodyparts.pkl', 'rb') as fp:
-            _cache = pkl.load(fp)
+            _cache = pkl.load(fp, fix_imports=True, encoding='latin1')
 
     return _cache
 
