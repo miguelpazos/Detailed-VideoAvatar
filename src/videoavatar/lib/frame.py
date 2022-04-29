@@ -16,11 +16,12 @@ class FrameData(object):
 
 def batch_invert(x):
     try:
-        import tensorflow as tf
+        import tensorflow.compat.v1 as tf
+        tf.disable_v2_behavior()
         global sess
 
         tx = tf.convert_to_tensor(x, dtype=tf.float32)
-        txi = tf.transpose(tf.matrix_inverse(tf.transpose(tx)))
+        txi = tf.transpose(tf.linalg.inv(tf.transpose(tx)))
 
         if sess is None:
             sess = tf.Session()

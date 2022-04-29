@@ -8,7 +8,7 @@ import chumpy as ch
 from six.moves import cPickle as pkl
 
 from opendr.camera import ProjectPoints
-from opendr.renderer import BoundaryRenderer, ColoredRenderer
+from opendr.renderer import ColoredRenderer, BoundaryRenderer
 from tqdm import tqdm
 
 from util import im, mesh
@@ -95,10 +95,10 @@ def main(pose_file, masks_file, camera_file, out, obj_out, num, icp_count, model
 
     # load data
     with open(model_file, 'rb') as fp:
-        model_data = pkl.load(fp, fix_imports=True, encoding='latin1')
+        model_data = pkl.load(fp, encoding='latin1')
 
     with open(camera_file, 'rb') as fp:
-        camera_data = pkl.load(fp, fix_imports=True, encoding='latin1')
+        camera_data = pkl.load(fp, encoding='latin1')
 
     pose_data = h5py.File(pose_file, 'r')
     poses = pose_data['pose'][first_frame:last_frame]

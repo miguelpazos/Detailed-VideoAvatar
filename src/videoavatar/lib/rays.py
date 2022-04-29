@@ -52,8 +52,8 @@ def unpose_and_select_rays(rays, Vi, smpl, rn_b, rn_m):
     rays_u_v[:, 0] = np.sum(tmp0, axis=1).T[:, :3] - T
     rays_u_v[:, 1] = np.sum(tmp1, axis=1).T[:, :3] - T
 
-    valid_rays = dist[tuple(np.vstack((ray_matches, range(dist.shape[1]))))] < 0.12
-    valid_verts = dist[tuple(np.vstack((range(dist.shape[0]), vert_matches)))] < 0.03
+    valid_rays = dist[np.vstack((ray_matches, range(dist.shape[1]))).tolist()] < 0.12
+    valid_verts = dist[np.vstack((range(dist.shape[0]), vert_matches)).tolist()] < 0.03
 
     ray_matches = ray_matches[valid_rays]
 

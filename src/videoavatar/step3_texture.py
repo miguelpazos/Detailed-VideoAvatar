@@ -5,7 +5,7 @@ import cv2
 import h5py
 import argparse
 import numpy as np
-import cPickle as pkl
+from six.moves import cPickle as pkl
 
 from opendr.renderer import ColoredRenderer
 from opendr.camera import ProjectPoints
@@ -21,13 +21,13 @@ def main(consensus_file, camera_file, video_file, pose_file, masks_file, out, mo
          first_frame, last_frame, display):
     # load data
     with open(model_file, 'rb') as fp:
-        model_data = pkl.load(fp)
+        model_data = pkl.load(fp, encoding='latin1')
 
     with open(camera_file, 'rb') as fp:
-        camera_data = pkl.load(fp)
+        camera_data = pkl.load(fp, encoding='latin1')
 
     with open(consensus_file, 'rb') as fp:
-        consensus_data = pkl.load(fp)
+        consensus_data = pkl.load(fp, encoding='latin1')
 
     pose_data = h5py.File(pose_file, 'r')
     poses = pose_data['pose'][first_frame:last_frame]
