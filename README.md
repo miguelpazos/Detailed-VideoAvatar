@@ -1,50 +1,96 @@
-# Detailed Video Avatar
+# Video Avatars Python 3.6
 
-We did several works in this project, including:
+noahcao/Detail-VideoAvatar fork prepared for work with Python 3.6
+## Instalación
+Download and unpack the SMPL model from here: http://smpl.is.tue.mpg.de/.
 
-1. Based on [videoavatar](https://github.com/thmoa/videoavatars)，which is the officially released source code of the paper [“Video Based Reconstruction of 3D People Models”](http://arxiv.org/abs/1803.04758), the project did human body reconstruction.
-3. We implemented the "mesh subdivision" and "medium-level shape reconstruction" techniques proposed in the paper ["Detailed human avatars from monocular video"](https://arxiv.org/abs/1808.01338)(Detailed Avatars), achieving detailed reconstruction of human body.
-4. We built a version of videoavatar with supporting Python3.x, [chumpy](https://github.com/mattloper/chumpy)and [opendr are rewritten to support it.
-5. We developed a convenient model rendering and visualization tools, to get the final visualization results of video avatar with texture added.
+Download and unpack the SMPLify Code from here: http://smplify.is.tue.mpg.de/
 
-We note that: although this README is written in English, many other texts in this project is written in Chinese, please feel free to contact us if you find anything hard to understand. Besides, some other features in "Detailed Avatar" are still to be implemented, we only realized the main two.
+```
+git clone https://github.com/miguelpazos/Detailed-VideoAvatar
+cd vendor
+mkdir smpl
+cd smpl
+ln -s <path to smpl folder>/models .
+ln -s <path to smpl folder>/smpl_webuser/*.py .
+cd ..
 
-# File Organization
+mkdir smplify
+cd smplify
+ln -s <path to your smplify installation>/code/models .
+# this file needs to be copied!
+cp <path to your smplify installation>/code/lib/sphere_collisions.py .
+# these files can be linked
+ln -s <path to smplify folder>/code/lib/capsule_body.py .
+ln -s <path to smplify folder>/code/lib/capsule_ch.py .
+ln -s <path to smplify folder>/code/lib/robustifiers.py .
+cd ..
+```
+Once you have installed SMPL and SMPLify you have to install the required python packages.
 
-```shell
-|-- Render: rendering tools 
-|-- snapshot：a demo based on one teammate\'s handsome selfie
-|-- docs					
-	|-- final_report：a conclusion report in Chinese
-	|-- Notes：other notes, nothing to do with the project
-|-- code					
-	|--	MLBSR: implementation of Medium-level Body-shape Reconstruction
-	|-- SSBM: implementation of Subdivided SMPL model
-	|-- Portable_py3.x：Python 3.x support of opendr and chumpy
-	|-- videoavatar：original videoavatar project files
+Opendr's pip repository's version is still not working with Python 3.6, so you have to install it from the opendr folder provided in this repository.
+```
+# install pip requirements
+pip install -r requirements.txt
+
+# opendr install
+cd opendr-lib
+python setup.py install
+cd ..
+```
+Change line 14 in `vendor/smplify/sphere_collisions.py` to
+```
+from vendor.smpl.lbs import verts_core
+```
+## Usage
+
+The software consists of three parts:
+
+1. `step1_pose.py`: pose reconstruction
+2. `step2_consensus.py`: consensus shape optimization
+3. `step3_texture.py`: texture calculation
+
+Starting the scripts will display usage information and options.
+Additionally, we provide helper bash scripts for easier processing of our dataset.
+
+The scripts in `prepare_data` might help you to process your own data.
+
+## Citation
+
+This repository contains code corresponding to:
+
+T. Alldieck, M. Magnor, W. Xu, C. Theobalt, and G. Pons-
+Moll. **Video based reconstruction of 3D people models**. In
+*IEEE Conference on Computer Vision and Pattern Recognition*, 2018.
+
+Please cite as:
+
+```
+@inproceedings{alldieck2018video,
+  title = {Video Based Reconstruction of 3D People Models},
+  author = {Alldieck, Thiemo and Magnor, Marcus and Xu, Weipeng and Theobalt, Christian and Pons-Moll, Gerard},
+  booktitle = {{IEEE} Conference on Computer Vision and Pattern Recognition},
+  year = {2018}
+}
 ```
 
-# DEMO
 
-![](./assets/base_demo.gif)
+## Dataset
 
-With several simply obtained selfies, we can build the 3D body reconstruction as follows. We note that the camera parameters are important to produce reliable reconstruction.
+The accompanied dataset can be downloaded here: https://graphics.tu-bs.de/people-snapshot
 
-![](assets/snapshot1.png)
+## License
 
-![](assets/snapshot2.png)
+Copyright (c) 2018 Thiemo Alldieck, Technische Universität Braunschweig, Max-Planck-Gesellschaft
 
-We produce the face reconstruction w/ and w/o techniques proposed in the "Detailed Avatar" paper. The right faces in the following two images are produced with those techniques. 
+**Please read carefully the following terms and conditions and any accompanying documentation before you download and/or use this software and associated documentation files (the "Software").**
 
-![](./assets/face_adjust.png)
+The authors hereby grant you a non-exclusive, non-transferable, free of charge right to copy, modify, merge, publish, distribute, and sublicense the Software for the sole purpose of performing non-commercial scientific research, non-commercial education, or non-commercial artistic projects.
 
-We produce the body reconstruction in a cloud point manner w/ and w/o techniques proposed in the "Detailed Avatar" paper. The comparison effect is remarkable.
+Any other use, in particular any use for commercial purposes, is prohibited. This includes, without limitation, incorporation in a commercial product, use in a commercial service, or production of other artefacts for commercial purposes.
 
-![](./assets/subdivision.png)
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
----
+You understand and agree that the authors are under no obligation to provide either maintenance services, update services, notices of latent defects, or corrections of defects with regard to the Software. The authors nevertheless reserve the right to update, modify, or discontinue the Software at any time.
 
-*Members of our team：[Jinkun Cao](https://github.com/noahcao)、[Yuqi Hu](https://github.com/ReimuYk)、[Yuchen Luo](https://github.com/592McAvoy)、[Nuo Chen](https://github.com/199ChenNuo)、[Erhu Feng](https://github.com/fengerhu1)*. *Thanks for their contributions, and especially for the selfies provided by handsome Erhu Feng*
-
-*Note that this project is just a non-official attempt of implementing detailed-avatars, to refer this work, please cite the original publication.*
-
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. You agree to cite the **Video Based Reconstruction of 3D People Models** paper in documents and papers that report on research using this Software.

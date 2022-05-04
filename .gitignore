@@ -1,0 +1,8 @@
+.idea/
+.DS_Store
+
+*.pyc
+vendor/smpl
+!vendor/__init__.py
+/vendor/smplify/
+/data/
